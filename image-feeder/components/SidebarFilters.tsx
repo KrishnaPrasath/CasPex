@@ -1,37 +1,23 @@
 'use client';
 
-import { BASE_URL } from "@app/lib/constants";
 import { Episode } from "@app/lib/types";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import useSWRInfinite from "swr/infinite";
+import { useEffect, useState } from "react";
 import LoadMore from "./LoadMore";
-
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
-
-const getKey = (pageIndex: number, previousPageData: {info: {next: boolean}, results: Episode[]}) => {
-    if (previousPageData && !previousPageData.info?.next) return null;
-    return  `${BASE_URL}/episode?page=${pageIndex + 2}`; // incrementing by 2, cuz we have 0th/1st data fetched from server
-};
+import useInfiniteScroll from "@app/hooks/use-infinite";
 
 export default function SidebadFilters(props: {episodes: Episode[] | null}) {
     const {episodes} = props;
     const [activeEpisode, setActiveEpisode] = useState<number | null>(null);
     const searchParams = useSearchParams();
     const router = useRouter();
-   
-    // SWR Infinite for paginated data
-    const { data, error, size, setSize, isValidating } = useSWRInfinite(
-        getKey,
-        fetcher,
-        { revalidateFirstPage: false } // Prevent revalidation of the first page
-    );
 
+    const {data, handleScroll, isValidating, loadMoreRef} = useInfiniteScroll({slug: "episode", loadIncrement: 2});
+   
     const renderData = [
         ...(episodes || []),
         ...(data ? data.flatMap((page) => page.results) : []),
     ];
-    
     const handleSelection = (id: number) => {
         if(id === activeEpisode) {
             setActiveEpisode(null);
@@ -50,40 +36,6 @@ export default function SidebadFilters(props: {episodes: Episode[] | null}) {
         }
     }, [activeEpisode, router, searchParams])
 
-  const loadMoreRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          setSize((prev) => prev + 1);
-        }
-      },
-      {
-        rootMargin: '100px',
-      }
-    );
-    const refCurrent = loadMoreRef.current;
-
-    if (refCurrent) {
-      observer.observe(refCurrent);
-    }
-
-    return () => {
-      if (refCurrent) {
-        observer.unobserve(refCurrent);
-      }
-    };
-  }, [loadMoreRef, setSize]);
-    
-
-    const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-        const target = e.target as HTMLDivElement;
-        if (target.scrollHeight - target.scrollTop === target.clientHeight) {
-          setSize(size + 1); // Load the next page
-        }
-      };
-    
     if(!episodes) {
         // TODO: fallback UI
         return <p>Episodes failed to fetch</p>
