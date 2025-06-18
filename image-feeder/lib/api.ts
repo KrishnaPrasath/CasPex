@@ -1,4 +1,4 @@
-import { BASE_URL } from "./constants";
+import { BASE_URL, INITIAL_CHARACTER_FETCH_COUNT } from "./constants";
 import { Character, Episode } from "./types";
 
 
@@ -8,12 +8,13 @@ export const fetchCharacters = async(characterList?: string[]):Promise<Character
         if(characterList?.length){
             fetch_url = fetch_url + `/${characterList}`
         } else {
-            const numbers = Array.from({ length: 50 }, (_, index) => index + 1).join(",");
+            const numbers = Array.from({ length: INITIAL_CHARACTER_FETCH_COUNT }, (_, index) => index + 1).join(",");
 
             fetch_url = fetch_url + `/${numbers}`
         }
-        const characters = await fetch(fetch_url);    
-        const data = await characters.json();
+        const response = await fetch(fetch_url);   
+        if (!response.ok) throw new Error(`Failed to fetch character: ${response.status}`); 
+        const data = await response.json();
         return  data;
     } catch (error) {
         console.error("Failed to fetch characters! >>", error);
@@ -27,8 +28,9 @@ export const fetchEpisode = async(id?: string):Promise<Episode[] | null> => {
         if(id){
             fetch_url = fetch_url + `/${id}`
         }
-        const episodes = await fetch(fetch_url);    
-        const data = await episodes.json();
+        const response = await fetch(fetch_url);    
+        if (!response.ok) throw new Error(`Failed to fetch episode: ${response.status}`); 
+        const data = await response.json();
         return data.results;
     } catch (error) {
         console.error("Failed to fetch episodes! >>", error);
