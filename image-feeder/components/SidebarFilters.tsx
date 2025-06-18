@@ -42,7 +42,7 @@ export default function SidebadFilters(props: {episodes: Episode[] | null}) {
         // TODO: fallback UI
         return <p>Episodes failed to fetch</p>
     }
-    return <div className="overflow-y-auto flex flex-col gap-4 pb-4" onScroll={handleScroll}>
+    return <div className="overflow-y-auto flex flex-col pb-4" onScroll={handleScroll}>
     <p className="p-4 text-center font-bold">Episodes</p>
     <ul className="p-3 flex flex-col gap-2">
         {
