@@ -10,17 +10,15 @@ export function useImage(props: {episodeID: string | null; initialCharacterData:
     // fetch based on query param
     const {episodeID, initialCharacterData} = props;
     const [loading, setLoading] = useState(false);
+    const [episodeName, setEpisodeName] = useState("");
     const [characters, setCharacters] = React.useState<Character[]>(initialCharacterData || []);
-
     useEffect(() => {
         const fetchEpisodeById = async (_episodeId: string) => {
           setLoading(true);
           const res = await fetch(`${BASE_URL}/episode/${_episodeId}`);
           const data: Episode = await res.json();
+          setEpisodeName(data.name);
     
-        //   const characterData = await Promise.all(
-        //     // data.characters.map((url: string) => fetch(url).then((res) => res.json()))
-        //   );
         const characterIDs = data.characters.map(ch => {
             return ch.split("/").pop();
         }).filter((id): id is string => Boolean(id));
@@ -41,6 +39,7 @@ export function useImage(props: {episodeID: string | null; initialCharacterData:
       }, [episodeID, initialCharacterData]);
     
   return {
-    characters
+    characters,
+    episodeName
   }
 }

@@ -41,11 +41,11 @@ export default function SidebadFilters(props: {episodes: Episode[] | null}) {
         return <p>Episodes failed to fetch</p>
     }
     return <div className="overflow-y-auto flex flex-col" onScroll={handleScroll}>
-    <p className="p-2">Episodes</p>
-    <ul className="p-2 flex flex-col gap-2">
+    <p className="p-4 text-center font-bold">Episodes</p>
+    <ul className="p-3 flex flex-col gap-2">
         {
             renderData.map(e => {
-                return <li key={e.id} onClick={() => handleSelection(e.id)} className={`border rounded-lg p-2 whitespace-nowrap overflow-ellipsis hover:bg-gray-200 ${activeEpisode === e.id ? "bg-amber-200" : ""}`} >{e.name}</li>
+                return <li key={e.id} onClick={() => handleSelection(e.id)} className={`border-2 rounded-lg p-3 whitespace-nowrap overflow-ellipsis hover:bg-purple-200 ${activeEpisode === e.id ? "bg-purple-800 text-white hover:text-black" : ""}`} >{e.name}</li>
             })
         }
     </ul>

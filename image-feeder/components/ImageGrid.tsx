@@ -14,7 +14,7 @@ export default function ImageGrid(props: {initialCharacterData: Character[] | nu
 
     const {loadMoreRef, isValidating, data, handleScroll} = useInfiniteScroll({loadIncrement: 2, slug: "character"});
 
-    const {characters} = useImage({episodeID: queriedEpisode, initialCharacterData});
+    const {characters, episodeName} = useImage({episodeID: queriedEpisode, initialCharacterData});
     const renderData = [
         ...(characters || []),
         ...(data ? data.flatMap((page) => page.results) : []),
@@ -22,6 +22,7 @@ export default function ImageGrid(props: {initialCharacterData: Character[] | nu
 
     if(!renderData) return null;
     return <div className="overflow-y-auto" onScroll={handleScroll}>
+        {queriedEpisode && <div className="p-4"><span className="font-bold">{renderData.length}</span>&nbsp;characters in&nbsp;<span className="font-bold">{episodeName}</span>&nbsp;Episode</div>}
         <div className="grid grid-cols-5 gap-2 p-2 ">
             {renderData.map(char => {
                 return <ImageCard key={char.id} character={char}/>
