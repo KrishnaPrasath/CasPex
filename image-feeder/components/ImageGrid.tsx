@@ -7,13 +7,14 @@ import { useImage } from "@app/hooks/use-image";
 import LoadMore from "./LoadMore";
 import useInfiniteScroll from "@app/hooks/use-infinite";
 import { CharacterLoader } from "./skeleton/CharacterLoader";
+import { SLUGS } from "@app/lib/constants";
 
 export default function ImageGrid(props: {initialCharacterData: Character[] | null}) {
     const {initialCharacterData} = props;
     const searchParams = useSearchParams();
-    const queriedEpisode = searchParams.get('episode');
+    const queriedEpisode = searchParams.get(SLUGS.EPISODE);
 
-    const {loadMoreRef, isValidating, data, handleScroll} = useInfiniteScroll({loadIncrement: 2, slug: "character"});
+    const {loadMoreRef, isValidating, data, handleScroll} = useInfiniteScroll({loadIncrement: 2, slug: SLUGS.CHARACTER});
 
     const {characters, episodeName} = useImage({episodeID: queriedEpisode, initialCharacterData});
     const renderData = [

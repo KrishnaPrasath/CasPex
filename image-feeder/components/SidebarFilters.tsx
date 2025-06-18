@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import LoadMore from "./LoadMore";
 import useInfiniteScroll from "@app/hooks/use-infinite";
 import { EpisodeLoader } from "./skeleton/EpisodeLoader";
+import { SLUGS } from "@app/lib/constants";
 
 export default function SidebadFilters(props: {episodes: Episode[] | null}) {
     const {episodes} = props;
@@ -13,7 +14,7 @@ export default function SidebadFilters(props: {episodes: Episode[] | null}) {
     const searchParams = useSearchParams();
     const router = useRouter();
 
-    const {data, handleScroll, isValidating, loadMoreRef} = useInfiniteScroll({slug: "episode", loadIncrement: 2});
+    const {data, handleScroll, isValidating, loadMoreRef} = useInfiniteScroll({slug: SLUGS.EPISODE, loadIncrement: 2});
    
     const renderData = [
         ...(episodes || []),
@@ -30,7 +31,7 @@ export default function SidebadFilters(props: {episodes: Episode[] | null}) {
     useEffect(() => {
         if(activeEpisode) {
             const params = new URLSearchParams(searchParams);
-            params.set('episode', activeEpisode.toString());
+            params.set(SLUGS.EPISODE, activeEpisode.toString());
             router.push(`/?${params.toString()}`);
         } else {
             router.replace('/');
