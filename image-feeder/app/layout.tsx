@@ -9,9 +9,10 @@ export const metadata = {
     return (
       <html lang="en">
         <body className="bg-gray-50 text-gray-900">
-        <div className="w-full p-4 bg-yellow text-center">Rick and Morty Characters</div>
+        <div className="w-full p-4 pt-6 bg-yellow text-center font-bold text-2xl">Rick and Morty Characters</div>
           <main className="p-4">{children}</main>
         </body>
       </html>
     );
   };
+
