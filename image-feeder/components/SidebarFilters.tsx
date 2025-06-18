@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import LoadMore from "./LoadMore";
 import useInfiniteScroll from "@app/hooks/use-infinite";
+import { EpisodeLoader } from "./skeleton/EpisodeLoader";
 
 export default function SidebadFilters(props: {episodes: Episode[] | null}) {
     const {episodes} = props;
@@ -40,7 +41,7 @@ export default function SidebadFilters(props: {episodes: Episode[] | null}) {
         // TODO: fallback UI
         return <p>Episodes failed to fetch</p>
     }
-    return <div className="overflow-y-auto flex flex-col" onScroll={handleScroll}>
+    return <div className="overflow-y-auto flex flex-col gap-4 pb-4" onScroll={handleScroll}>
     <p className="p-4 text-center font-bold">Episodes</p>
     <ul className="p-3 flex flex-col gap-2">
         {
@@ -49,6 +50,6 @@ export default function SidebadFilters(props: {episodes: Episode[] | null}) {
             })
         }
     </ul>
-    <LoadMore ref={loadMoreRef} isValidating={isValidating}/>
+    <LoadMore ref={loadMoreRef} isValidating={isValidating} loader={<EpisodeLoader/>}/>
     </div>
 };
