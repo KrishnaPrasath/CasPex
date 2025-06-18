@@ -7,10 +7,14 @@ export const fetchCharacters = async(characterList?: string[]):Promise<Character
         let fetch_url = `${BASE_URL}/character`;
         if(characterList?.length){
             fetch_url = fetch_url + `/${characterList}`
+        } else {
+            const numbers = Array.from({ length: 50 }, (_, index) => index + 1).join(",");
+
+            fetch_url = fetch_url + `/${numbers}`
         }
         const characters = await fetch(fetch_url);    
         const data = await characters.json();
-        return characterList?.length ? data : data.results;
+        return  data;
     } catch (error) {
         console.error("Failed to fetch characters! >>", error);
         return null;

@@ -5,6 +5,7 @@ import { Episode } from "@app/lib/types";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import useSWRInfinite from "swr/infinite";
+import LoadMore from "./LoadMore";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -23,7 +24,7 @@ export default function SidebadFilters(props: {episodes: Episode[] | null}) {
     const { data, error, size, setSize, isValidating } = useSWRInfinite(
         getKey,
         fetcher,
-        { initialSize: 0,revalidateFirstPage: false } // Prevent revalidation of the first page
+        { revalidateFirstPage: false } // Prevent revalidation of the first page
     );
 
     const renderData = [
@@ -96,9 +97,6 @@ export default function SidebadFilters(props: {episodes: Episode[] | null}) {
             })
         }
     </ul>
-    <div ref={loadMoreRef} className="h-8 flex justify-center items-center text-xs text-gray-500">
-        {isValidating ? 'Loading more...' : 'Scroll to load more'}
-      </div>
-
+    <LoadMore ref={loadMoreRef} isValidating={isValidating}/>
     </div>
 };

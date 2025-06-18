@@ -10,7 +10,7 @@ const Page = async() => {
     return <>
         <div className="flex gap-4 border-2 max-h-screen rounded-lg drop-shadow-2xl">
             <SidebarFilter episodes={episodes}/>
-            <div className="flex-2"><ImageGrid initialCharacterData={characters}/></div>
+            <div className="flex-2 overflow-y-auto"><ImageGrid initialCharacterData={characters}/></div>
         </div>
     </>;
 };
